@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Markdown Online</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>
+	<style>
+		blockquote {
+			padding-left: 2em
+		},
+		blockquote > blockquote {
+			padding-left: 4em
+		}
+	</style>
+</head>
+<body>
+<div class="container" id="drop_content">
+	<div class="row" style="height: 20px"></div>
+	<div class="row">
+		<label class="col-md-10" style="color:#005344"><h3>Markdown Online</h3></label></div>
+	<div class="row col-md-12">
+		<textarea id="source_content" class="col-md-6" style="height: 500px"></textarea>
+		<div id="conver_content" class="col-md-6" style="height: 500px; overflow-x: auto"></div>
+	</div>
+	<div class="row col-md-12" style="height: 10px"></div>
+	<div class="row col-md-12">
+		<input type="file" id="file_get">
+	</div>
+	<div class="row col-md-12" style="height: 10px"></div>
+	<div class="row col-md-12">
+		<button class="btn btn-primary" id="open_file">打开</button>
+	</div>
+</div>
+	
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+    	tex2jax: {
+	      	inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      	displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    	}
+  	});
+  	MathJax.Hub.Config({
+  		showProcessingMessages: false,
+  		messageStyle: "none"
+	});
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/marked/1.1.0/marked.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		var file_name = "";
+
+		$('#source_content').on('input propertychange', function(){
+			markdown_render();
+		});
+
+		$('#open_file').on('click', function(){
+			var file = $('#file_get')[0].files[0];
+			var reader = new FileReader();
+			file_name = file.name;
+			reader.readAsText(file);
+			reader.onload = function(){
+				$('#source_content').val(this.result);
+				markdown_render();
+			}
+		});
+	});
+
+	function markdown_render(){
+		var text_str = $('#source_content').val();
+		var html_str = marked(text_str);
+		$('#conver_content').html(html_str);
+		window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	}
+
+
+	
+</script>
+</body>
+</html>
